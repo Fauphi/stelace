@@ -279,8 +279,8 @@ workflows:
       #      - build-with-dlc
       - deploy:
           context: stelace-server
-          requires:
-            - test-after-dlc
+          #requires:
+          #  - test-after-dlc
           filters:
             branches:
               only: master
