@@ -1,61 +1,50 @@
-const Knex = require('knex')
+const Knex = require("knex");
 
-const knexInstances = {}
+const knexInstances = {};
 
-function getKnex (connection = {}, options = {}) {
-  const key = getKnexCacheKey(connection)
-  if (knexInstances[key]) return knexInstances[key]
+function getKnex(connection = {}, options = {}) {
+  const key = getKnexCacheKey(connection);
+  if (knexInstances[key]) return knexInstances[key];
 
-  const {
-    host,
-    user,
-    password,
-    database,
-    port
-  } = connection
+  const { host, user, password, database, port } = connection;
   const {
     pool = {
       min: 2,
-      max: 10
-    }
-  } = options
+      max: 10,
+    },
+  } = options;
 
   const knex = Knex({
-    client: 'pg',
+    client: "pg",
     useNullAsDefault: true,
     connection: {
       host,
       user,
       password,
       database,
-      port
+      port,
+      ssl: { rejectUnauthorized: false },
     },
-    pool
-  })
+    pool,
+  });
 
-  knexInstances[key] = knex
+  knexInstances[key] = knex;
 
-  return knex
+  return knex;
 }
 
-function getKnexCacheKey (connection) {
-  const {
-    host,
-    user,
-    password,
-    database,
-    port
-  } = connection
+function getKnexCacheKey(connection) {
+  const { host, user, password, database, port } = connection;
 
   return JSON.stringify({
     host,
     user,
     password,
     database,
-    port
-  })
+    port,
+  });
 }
 
 module.exports = {
-  getKnex
-}
+  getKnex,
+};
